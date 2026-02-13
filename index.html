@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nuestro momento</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+    <!-- PASSWORD SCREEN -->
+<div id="lock-screen">
+  <div class="lock-box">
+    <h1>Solo para vos</h1>
+    <p>Ingresá la contraseña</p>
+    <p>A ver si sos tan picante paras las derivadas</p>
+        \[
+\frac{d}{dx}\left(\frac{7092025}{2}x^2\right) = contraseña 
+\]
+
+
+
+    <input type="password" id="password-input" placeholder="••••••••" />
+    <button id="unlock-btn">Entrar</button>
+
+    <span id="error-msg">La contraseña no es correcta</span>
+  </div>
+</div>
+
+
+<div id="protected-content">
+  <!-- HERO -->
+ <section class="hero">
+  <div class="hero-overlay">
+    <h1>Algo unico para vos <br>Para que sepas lo unica que sos.</h1>
+  </div>
+</section>
+
+  
+
+  <!-- STORY -->
+  <section class="story">
+    <p class="story-text">
+      La verdad es que no es algo fácil pensar cómo hacer un regalo a la distancia. Decidí que este era un regalo original, único y un poco nerd. Espero que te guste, corazón.<br><br>
+      Te mereces esto y mucho mas.
+    </p>
+  </section>
+
+  <!-- TIMELINE 
+  <section class="timeline">
+    <h2>Nuestra historia</h2>
+    <div class="timeline-items">
+      <div class="item">
+        <span>2019</span>
+        <p>Nos conocimos</p>
+      </div>
+      <div class="item">
+        <span>2020</span>
+        <p>Nuestra primera cita</p>
+      </div>
+      <div class="item">
+        <span>2021</span>
+        <p>El primer “te amo”</p>
+      </div>
+      <div class="item">
+        <span>Hoy</span>
+        <p>Elegirnos todos los días</p>
+      </div>
+    </div>
+  </section>-->
+
+  <!-- GALERÍA 
+  <section class="gallery">
+    <figure>
+      <img src="media/photo1.jpg" alt="">
+      <figcaption>Tus abrazos son mi refugio</figcaption>
+    </figure>
+    <figure>
+      <img src="media/photo2.jpg" alt="">
+      <figcaption>Risas que lo dicen todo</figcaption>
+    </figure>
+    <figure>
+      <img src="media/photo3.jpg" alt="">
+      <figcaption>Nuestro lugar favorito</figcaption>
+    </figure>
+  </section> -->
+
+  <!-- COSAS QUE ME ENCANTAN -->
+
+ 
+
+  <section class="mobile-carousel">
+  <h2>Momentos</h2>
+  <h3>Toca las imagenes</h3>
+
+  <div class="carousel-container">
+
+    <button class="arrow left">&#10094;</button>
+
+    <div class="carousel-card">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <img id="carousel-img" src="media/photo1.jpg" alt="">
+        </div>
+        <div class="flip-back">
+          <p id="carousel-text">
+            ¿Quién diría lo cursi que soy, no? Bueno, no me arrepiento de nada. Esta foto solo me trae buenos recuerdos de ese día, como cuando me empujaste al agua calentita... Pero bueno, ese día estuvo terrible."
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <button class="arrow right">&#10095;</button>
+
+  </div><br><br><br>
+
+  <h3>Bueno ahora vamos con algo un poquito mas personal</h3>
+
+<section class="letter-link">
+  <a href="carta.html" class="letter-btn">
+    Abrir cuando quieras
+  </a>
+</section><br><br>
+
+<h3>Ahora vamos con un juego un poco mas divertido jeje.</h3>
+  
+ <section class="love-list">
+  <h2>Cosas que me encantan de vos</h2>
+
+  <div class="cards mystery-cards">
+
+    <div class="m-card">
+      <div class="m-inner">
+        <div class="m-front">?</div>
+        <div class="m-back">Tu sonrisa</div>
+      </div>
+    </div>
+
+    <div class="m-card">
+      <div class="m-inner">
+        <div class="m-front">?</div>
+        <div class="m-back">Cómo escuchás</div>
+      </div>
+    </div>
+
+    <div class="m-card">
+      <div class="m-inner">
+        <div class="m-front">?</div>
+        <div class="m-back">Tus abrazos</div>
+      </div>
+    </div>
+
+    <div class="m-card">
+  <div class="m-inner">
+    <div class="m-front">?</div>
+    <div class="m-back">Tu forma de amar</div>
+  </div>
+</div>
+
+
+  </div>
+</section>
+<h3>Si, lo se. Disfruto de ser una mala persona y dejarte con la duda de la 4ta cosa pero bueno te va a tocar averiguarlo</h3>
+
+  
+</section>
+
+ <!-- FINAL -->
+  <section class="final">
+  <button class="surprise-btn">Ultima Sorpresa</button>
+
+  <div class="video-wrapper">
+    <video class="hidden-message reveal-video" controls>
+      <source src="media/video.mp4" type="video/mp4">
+    </video>
+  </div>
+</section>
+
+<!-- RESEÑA -->
+ <section class="feedback">
+  <h2>Quiero saber qué sentiste 🤍</h2>
+
+  <form action="https://formspree.io/f/mwvnlrer" method="POST">
+    <textarea 
+      name="mensaje" 
+      placeholder="Escribime lo que sentiste al ver esto..."
+      required>
+    </textarea>
+
+    <button type="submit">Enviar</button>
+  </form>
+</section>
+
+
+
+</div>
+
+
+
+
+
+
+<script>
+  const PASSWORD1 = "7092025";
+  const PASSWORD2 = "7092025x"; // 
+
+  const lockScreen = document.getElementById("lock-screen");
+  const content = document.getElementById("protected-content");
+  const input = document.getElementById("password-input");
+  const button = document.getElementById("unlock-btn");
+  const error = document.getElementById("error-msg");
+
+  button.addEventListener("click", unlock);
+  input.addEventListener("keypress", e => {
+    if (e.key === "Enter") unlock();
+  });
+
+  function unlock() {
+    if (input.value === PASSWORD1 || input.value === PASSWORD2) {
+      lockScreen.style.opacity = "0";
+      setTimeout(() => {
+        lockScreen.style.display = "none";
+        content.style.display = "block";
+      }, 600);
+    } else {
+      error.style.display = "block";
+      input.value = "";
+    }
+  }
+</script>
+<script>
+  document.querySelectorAll('.flip-card').forEach(card => {
+    card.addEventListener('click', () => {
+      card.classList.toggle('flipped');
+    });
+  });
+</script>
+
+<script>
+  const slides = [
+   
+    {
+      img: "media/photo2.jpg",
+      text: "Haceme acordar que nunca más pida limonada de frutilla, ¡TIENE QUE SER DE LIMÓN! Y con el puré de picaflor también fue complicado. Por suerte, lo bueno era levantar la cabeza y verte a vos; eso sí es lindo."
+    },
+    {
+      img: "media/photo3.jpg",
+      text: "Qué foto esta, sentí que tenía que estar acá. Esa noche fue rara; me abrí y te conté realmente cómo me sentía con vos, te conté lo importante e increíble que sos. Todo eso mientras veíamos las estrellas... Solo puedo pensar y decir: “Ese es el lugar donde quiero estar”."
+    },
+    {
+      img: "media/photo4.jpg",
+      text: "Creo que esta es mi foto favorita, no solo por lo linda que sea; es algo que abarca todo. Me alegra que al voltear para el costado la persona a la que vea seas vos, haces que cada momento sea mejor."
+    },
+    {
+      img: "media/photo5.jpg",
+      text: "Veo esta foto y digo: Fua. No solo me bancás en cualquier cosa que haga, sino que también estás conmigo en este increíble camino que es la noche. Me encanta que seas parte de esto."
+    },
+    {
+      img: "media/photo6.jpg",
+      text: "Casi me olvido del día que Ferrari y Red Bull se unieron para darte un monoplaza; lo chocaste en la primera curva, pero fue problema del auto, no tuyo. Vos sos la máquina."
+    },
+    {
+      img: "media/photo7.jpg",
+      text: "Este fue un punto de inflexión, un momento en donde sin decir nada, solo con vos al lado y esa hermosa vista, pude sentirme completamente tranquilo. Buena compañía + buena vista = Buena vida."
+    },
+    {
+      img: "media/photo8.jpg",
+      text: "Qué mañana fue esta; la primera vez que veíamos a Colapa juntos. Nunca me voy a olvidar cuando dije que por cada adelantamiento era un beso; solo me ponía feliz cuando los otros entraban a pits, jaja."
+    },
+    {
+      img: "media/photo9.jpg",
+      text: "¿Te acordás de nuestra primera foto juntos? Y qué foto, eh, jajaja. En este momento estaba dudando cuál poner acá. Entré a la galería, vi esta foto y dije: Esta tiene que ser. Capaz no fue donde empezó todo, pero sí es un recuerdo muy feliz."
+    }
+    
+  ];
+
+  let current = 0;
+
+  const img = document.getElementById("carousel-img");
+  const text = document.getElementById("carousel-text");
+  const card = document.querySelector(".carousel-card");
+
+  function updateSlide() {
+  card.classList.remove("flipped");
+
+  card.classList.add("animate-out");
+
+  setTimeout(() => {
+    img.src = slides[current].img;
+    text.textContent = slides[current].text;
+
+    card.classList.remove("animate-out");
+    card.classList.add("animate-in");
+
+    setTimeout(() => {
+      card.classList.remove("animate-in");
+    }, 500);
+
+  }, 300);
+}
+
+
+  document.querySelector(".arrow.left").addEventListener("click", () => {
+    current = (current - 1 + slides.length) % slides.length;
+    updateSlide();
+  });
+
+  document.querySelector(".arrow.right").addEventListener("click", () => {
+    current = (current + 1) % slides.length;
+    updateSlide();
+  });
+
+  card.addEventListener("click", () => {
+    card.classList.toggle("flipped");
+  });
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+  const btn = document.querySelector('.surprise-btn');
+  const video = document.querySelector('.reveal-video');
+
+  btn.addEventListener('click', () => {
+    video.classList.add('show');
+    btn.style.display = 'none';
+  });
+
+});
+</script>
+
+<script>
+  const mysteryCards = document.querySelectorAll('.m-card');
+  let flippedCount = 0;
+  const maxFlips = 3;
+  let locked = false;
+
+  mysteryCards.forEach(card => {
+    card.addEventListener('click', () => {
+
+      // Si ya se bloquearon o ya está dada vuelta, no hacer nada
+      if (locked || card.classList.contains('flipped')) {
+        return;
+      }
+
+      card.classList.add('flipped');
+      flippedCount++;
+
+      // Si llegó a 3 → bloquear todas
+      if (flippedCount === maxFlips) {
+        locked = true;
+
+        mysteryCards.forEach(c => {
+          if (!c.classList.contains('flipped')) {
+            c.classList.add('locked');
+          }
+        });
+      }
+
+    });
+  });
+</script>
+
+
+
+
+
+  
+
+</body>
+</html>
