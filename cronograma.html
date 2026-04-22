@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Noche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8d08a;
+    --dark: #080808;
+    --dark2: #111010;
+    --red: #8b1a1a;
+    --cream: #f0e6d0;
+    --grey: #555;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--cream);
+    height: 100vh;
+    overflow: hidden;
+    cursor: default;
+  }
+
+  /* ─── FILM GRAIN OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ─── LETTERBOX BARS ─── */
+  .letterbox-top, .letterbox-bottom {
+    position: fixed;
+    left: 0; right: 0;
+    height: 60px;
+    background: #000;
+    z-index: 100;
+  }
+  .letterbox-top { top: 0; }
+  .letterbox-bottom { bottom: 0; }
+
+  /* ─── SLIDES CONTAINER ─── */
+  #slides {
+    position: fixed;
+    inset: 0;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1.2s ease;
+    padding: 80px 40px;
+  }
+
+  .slide.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* ─── SLIDE 0: INTRO / COUNTDOWN ─── */
+  #slide-0 {
+    background: radial-gradient(ellipse at 50% 40%, #1a0a00 0%, var(--dark) 70%);
+  }
+
+  .intro-eyebrow {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.4em;
+    font-size: 0.75rem;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.5s forwards;
+  }
+
+  .intro-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 12vw, 9rem);
+    line-height: 0.9;
+    text-align: center;
+    color: var(--cream);
+    text-shadow: 0 0 80px rgba(201,168,76,0.3);
+    opacity: 0;
+    animation: fadeUp 1s ease 0.9s forwards;
+  }
+
+  .intro-title span {
+    color: var(--gold);
+    display: block;
+  }
+
+  .intro-sub {
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--gold-light);
+    margin-top: 1.5rem;
+    letter-spacing: 0.1em;
+    opacity: 0;
+    animation: fadeUp 1s ease 1.3s forwards;
+  }
+
+  .intro-line {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    margin: 2rem auto;
+    opacity: 0;
+    animation: fadeUp 1s ease 1.6s forwards;
+  }
+
+  #countdown-box {
+    text-align: center;
+    opacity: 0;
+    animation: fadeUp 1s ease 2s forwards;
+  }
+
+  .countdown-label {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.35em;
+    font-size: 0.7rem;
+    color: var(--grey);
+    margin-bottom: 0.5rem;
+  }
+
+  #countdown-display {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 6vw, 4.5rem);
+    color: var(--gold);
+    letter-spacing: 0.05em;
+    text-shadow: 0 0 30px rgba(201,168,76,0.5);
+  }
+
+  /* ─── SLIDE 1: CINE ─── */
+  #slide-1 {
+    background: radial-gradient(ellipse at 30% 50%, #0d0018 0%, var(--dark) 65%);
+  }
+
+  /* ─── SLIDE 2: BOLOS ─── */
+  #slide-2 {
+    background: radial-gradient(ellipse at 70% 40%, #001018 0%, var(--dark) 65%);
+  }
+
+  /* ─── SLIDE 3: TERRAZA ─── */
+  #slide-3 {
+    background: radial-gradient(ellipse at 50% 20%, #100808 0%, var(--dark) 65%);
+  }
+
+  /* ─── CHAPTER SLIDES SHARED ─── */
+  .chapter-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(8rem, 22vw, 18rem);
+    line-height: 1;
+    color: rgba(201,168,76,0.06);
+    position: absolute;
+    right: -0.05em;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .chapter-tag {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.5em;
+    color: var(--gold);
+    margin-bottom: 0.8rem;
+  }
+
+  .chapter-time {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.5rem, 9vw, 7rem);
+    line-height: 1;
+    color: var(--cream);
+  }
+
+  .chapter-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 6vw, 5rem);
+    color: var(--gold);
+    letter-spacing: 0.05em;
+    margin-top: 0.2em;
+  }
+
+  .chapter-desc {
+    font-style: italic;
+    font-size: clamp(0.9rem, 2vw, 1.2rem);
+    color: #a09070;
+    max-width: 480px;
+    line-height: 1.7;
+    margin-top: 1.2rem;
+    text-align: center;
+  }
+
+  .chapter-detail {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 1.5rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    font-family: 'Bebas Neue', sans-serif;
+    border: 1px solid rgba(201,168,76,0.25);
+    padding: 0.5rem 1.4rem;
+  }
+
+  /* ─── LOCKED SLIDE ─── */
+  .locked-slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.85);
+    z-index: 10;
+    text-align: center;
+    padding: 2rem;
+    backdrop-filter: blur(4px);
+  }
+
+  .lock-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    filter: grayscale(1);
+    opacity: 0.5;
+  }
+
+  .lock-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 0.2em;
+    color: var(--grey);
+  }
+
+  .lock-time {
+    font-style: italic;
+    font-size: 1rem;
+    color: #444;
+    margin-top: 0.4rem;
+  }
+
+  /* ─── NAV DOTS ─── */
+  #nav {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 200;
+  }
+
+  .nav-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #333;
+    transition: all 0.4s ease;
+    cursor: pointer;
+  }
+
+  .nav-dot.active {
+    background: var(--gold);
+    transform: scale(1.4);
+  }
+
+  .nav-dot.locked {
+    background: #222;
+    cursor: not-allowed;
+  }
+
+  /* ─── NEXT BUTTON ─── */
+  #next-btn {
+    position: fixed;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    padding: 1rem 0.7rem;
+    cursor: pointer;
+    z-index: 200;
+    writing-mode: vertical-rl;
+    transition: all 0.3s ease;
+    display: none;
+  }
+
+  #next-btn:hover {
+    background: rgba(201,168,76,0.1);
+    border-color: var(--gold);
+  }
+
+  /* ─── SLIDE REVEAL ANIMATION ─── */
+  .slide-content {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .slide-content > * {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .slide.active .slide-content > *:nth-child(1) { animation: fadeUp 0.8s ease 0.1s forwards; }
+  .slide.active .slide-content > *:nth-child(2) { animation: fadeUp 0.8s ease 0.3s forwards; }
+  .slide.active .slide-content > *:nth-child(3) { animation: fadeUp 0.8s ease 0.5s forwards; }
+  .slide.active .slide-content > *:nth-child(4) { animation: fadeUp 0.8s ease 0.7s forwards; }
+  .slide.active .slide-content > *:nth-child(5) { animation: fadeUp 0.8s ease 0.9s forwards; }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── HORIZONTAL RULE ─── */
+  .divider {
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    margin: 1rem auto;
+    opacity: 0.5;
+  }
+
+  /* ─── STARS BG ─── */
+  .stars {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .star {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle var(--dur, 3s) ease-in-out infinite;
+    animation-delay: var(--del, 0s);
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.1; }
+    50% { opacity: 0.8; }
+  }
+
+  /* ─── EMOJI BIG ─── */
+  .big-emoji {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    filter: saturate(0.8);
+  }
+
+  /* ─── LUCIA BADGE ─── */
+  .lucia-badge {
+    position: fixed;
+    top: 70px;
+    right: 24px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    opacity: 0.5;
+    z-index: 200;
+  }
+
+  /* vignette */
+  #slide-1::after, #slide-2::after, #slide-3::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.7) 100%);
+    pointer-events: none;
+  }
+
+  .slide-0-stars { position: absolute; inset: 0; overflow: hidden; }
+</style>
+</head>
+<body>
+
+<div class="letterbox-top"></div>
+<div class="letterbox-bottom"></div>
+<div class="lucia-badge">PARA LUCÍA</div>
+
+<!-- NAV -->
+<div id="nav">
+  <div class="nav-dot active" onclick="goTo(0)"></div>
+  <div class="nav-dot locked" onclick="goTo(1)"></div>
+  <div class="nav-dot locked" onclick="goTo(2)"></div>
+  <div class="nav-dot locked" onclick="goTo(3)"></div>
+</div>
+
+<button id="next-btn" onclick="nextSlide()">SIGUIENTE →</button>
+
+<div id="slides">
+
+  <!-- ══════════════════════════════
+       SLIDE 0 — INTRO
+  ══════════════════════════════ -->
+  <div class="slide active" id="slide-0">
+    <div class="slide-0-stars" id="stars-0"></div>
+    <div class="intro-eyebrow">VIERNES · UNA NOCHE ESPECIAL</div>
+    <div class="intro-title">
+      La<br><span>Noche</span>
+    </div>
+    <div class="intro-sub">Todo está planeado, Lucía.</div>
+    <div class="intro-line"></div>
+    <div id="countdown-box">
+      <div class="countdown-label">PRÓXIMO CAPÍTULO SE DESBLOQUEA EN</div>
+      <div id="countdown-display">--:--:--</div>
+    </div>
+    <div style="margin-top:1rem; opacity:0; animation: fadeUp 1s ease 2.3s forwards;">
+      <div style="font-family:'Bebas Neue',sans-serif; font-size:0.65rem; letter-spacing:0.4em; color:var(--gold); cursor:pointer; border:1px solid rgba(201,168,76,0.3); padding:0.5rem 1.4rem;" onclick="goTo(1)">VER CAPÍTULO I →</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SLIDE 1 — CINE
+  ══════════════════════════════ -->
+  <div class="slide" id="slide-1">
+    <div class="stars" id="stars-1"></div>
+    <div class="chapter-number">I</div>
+    <div class="slide-content">
+      <div class="chapter-tag">· CAPÍTULO I ·</div>
+      <div class="chapter-time">22:15</div>
+      <div class="chapter-title">El Cine</div>
+      <div class="divider"></div>
+      <div class="chapter-desc">
+        Una sala oscura, una película, y el pequeño delito de hacerlo con estilo.<br>
+        Hamburgesas, papas y gaseosas van a entrar sí o sí.
+      </div>
+      <div class="chapter-detail">🍔 CONTRABANDO GOURMET AUTORIZADO</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SLIDE 2 — BOLOS
+  ══════════════════════════════ -->
+  <div class="slide" id="slide-2">
+    <div class="stars" id="stars-2"></div>
+    <div class="chapter-number">II</div>
+    <div class="slide-content">
+      <div class="chapter-tag">· CAPÍTULO II ·</div>
+      <div class="chapter-time">01:00</div>
+      <div class="chapter-title">Los Bolos</div>
+      <div class="divider"></div>
+      <div class="chapter-desc">
+        Diez pinos. Un ganador. Un perdedor que va a tener que cantar<br>
+        lo que el otro decida. Sin excusas, sin escapatoria.
+      </div>
+      <div class="chapter-detail">🎳 EL QUE PIERDE, CANTA</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SLIDE 3 — TERRAZA
+  ══════════════════════════════ -->
+  <div class="slide" id="slide-3">
+    <div class="stars" id="stars-3"></div>
+    <div class="chapter-number">III</div>
+    <div class="slide-content">
+      <div class="chapter-tag">· CAPÍTULO III · FINAL ·</div>
+      <div class="chapter-time">02:30</div>
+      <div class="chapter-title">La Terraza</div>
+      <div class="divider"></div>
+      <div class="chapter-desc">
+        Arriba de todo, con un trago en la mano<br>
+        y la música justa. El mejor final que se pudo escribir.
+      </div>
+      <div class="chapter-detail">🥃 TERRAZA · MÚSICA · VOS</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ─── CONFIG ───────────────────────────────
+  // Horarios de desbloqueo (hora, minuto) – viernes
+  const UNLOCK_TIMES = [
+    null,                // slide 0: siempre disponible
+    null,                // slide 1: siempre disponible
+    { h: 1,  m: 0  },   // slide 2: 01:00 (madrugada)
+    { h: 2,  m: 30 },   // slide 3: 02:30 (madrugada)
+  ];
+
+  // Texto para el candado bloqueado
+  const LOCK_TEXTS = [
+    null,
+    { title: "CAPÍTULO I", time: "Se desbloquea a las 22:15" },
+    { title: "CAPÍTULO II", time: "Se desbloquea a la 01:00" },
+    { title: "CAPÍTULO III", time: "Se desbloquea a las 02:30" },
+  ];
+  // ──────────────────────────────────────────
+
+  let currentSlide = 0;
+  const totalSlides = 4;
+
+  // ─── STARS ───────────────────────────────
+  function createStars(containerId, count) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    for (let i = 0; i < count; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      s.style.left = Math.random() * 100 + '%';
+      s.style.top = Math.random() * 100 + '%';
+      s.style.setProperty('--dur', (2 + Math.random() * 4) + 's');
+      s.style.setProperty('--del', (Math.random() * 5) + 's');
+      s.style.opacity = Math.random() * 0.5;
+      el.appendChild(s);
+    }
+  }
+  createStars('stars-0', 120);
+  createStars('stars-1', 80);
+  createStars('stars-2', 80);
+  createStars('stars-3', 100);
+
+  // ─── UNLOCK LOGIC ────────────────────────
+  function toMinutesSince6pm(h, m) {
+    let adj = h < 12 ? h + 24 : h;
+    return (adj - 18) * 60 + m;
+  }
+
+  function isUnlocked(index) {
+    const t = UNLOCK_TIMES[index];
+    if (!t) return true; // null = siempre disponible
+    const now = new Date();
+    const nowMins = toMinutesSince6pm(now.getHours(), now.getMinutes());
+    const targetMins = toMinutesSince6pm(t.h, t.m);
+    return nowMins >= targetMins;
+  }
+
+  // ─── INJECT LOCK OVERLAYS ─────────────────
+  function injectLocks() {
+    for (let i = 1; i < totalSlides; i++) {
+      const slide = document.getElementById('slide-' + i);
+      // Remove existing lock if any
+      const existing = slide.querySelector('.locked-slide');
+      if (existing) existing.remove();
+
+      if (!isUnlocked(i)) {
+        const lock = document.createElement('div');
+        lock.className = 'locked-slide';
+        lock.innerHTML = `
+          <div class="lock-icon">🔒</div>
+          <div class="lock-title">${LOCK_TEXTS[i].title}</div>
+          <div class="lock-time">${LOCK_TEXTS[i].time}</div>
+        `;
+        slide.appendChild(lock);
+      }
+    }
+  }
+
+  // ─── UPDATE NAV DOTS ─────────────────────
+  function updateDots() {
+    const dots = document.querySelectorAll('.nav-dot');
+    dots.forEach((dot, i) => {
+      dot.classList.remove('active', 'locked');
+      if (i === currentSlide) dot.classList.add('active');
+      else if (!isUnlocked(i)) dot.classList.add('locked');
+    });
+  }
+
+  // ─── NEXT BUTTON ─────────────────────────
+  function updateNextBtn() {
+    const btn = document.getElementById('next-btn');
+    const nextIndex = currentSlide + 1;
+    if (nextIndex >= totalSlides) {
+      btn.style.display = 'none';
+      return;
+    }
+    btn.style.display = isUnlocked(nextIndex) ? 'block' : 'none';
+  }
+
+  // ─── GO TO SLIDE ─────────────────────────
+  function goTo(index) {
+    if (index < 0 || index >= totalSlides) return;
+    if (!isUnlocked(index)) return;
+
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+    document.getElementById('slide-' + index).classList.add('active');
+    currentSlide = index;
+    updateDots();
+    updateNextBtn();
+  }
+
+  function nextSlide() {
+    const next = currentSlide + 1;
+    if (next < totalSlides && isUnlocked(next)) goTo(next);
+  }
+
+  // ─── COUNTDOWN ───────────────────────────
+  function nextUnlock() {
+    for (let i = 1; i < totalSlides; i++) {
+      if (!isUnlocked(i)) return UNLOCK_TIMES[i];
+    }
+    return null;
+  }
+
+  function updateCountdown() {
+    const target = nextUnlock();
+    const display = document.getElementById('countdown-display');
+    const box = document.getElementById('countdown-box');
+    const label = box ? box.querySelector('.countdown-label') : null;
+
+    if (!target) {
+      if (display) display.textContent = 'TODO DESBLOQUEADO';
+      if (label) label.textContent = '';
+      return;
+    }
+
+    const now = new Date();
+    const tgt = new Date(now);
+    tgt.setHours(target.h, target.m, 0, 0);
+    if (target.h < 12 && now.getHours() >= 12) {
+      tgt.setDate(tgt.getDate() + 1);
+    }
+    if (tgt <= now) tgt.setDate(tgt.getDate() + 1);
+
+    const diff = tgt - now;
+    const hh = Math.floor(diff / 3600000);
+    const mm = Math.floor((diff % 3600000) / 60000);
+    const ss = Math.floor((diff % 60000) / 1000);
+
+    if (display) {
+      display.textContent =
+        String(hh).padStart(2,'0') + ':' +
+        String(mm).padStart(2,'0') + ':' +
+        String(ss).padStart(2,'0');
+    }
+  }
+
+  // ─── KEYBOARD NAV ────────────────────────
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goTo(currentSlide - 1);
+  });
+
+  // ─── INIT ─────────────────────────────────
+  injectLocks();
+  updateDots();
+  updateNextBtn();
+  updateCountdown();
+
+  setInterval(() => {
+    injectLocks();
+    updateDots();
+    updateNextBtn();
+    updateCountdown();
+  }, 1000);
+</script>
+</body>
+</html>
