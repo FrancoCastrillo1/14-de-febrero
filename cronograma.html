@@ -500,20 +500,20 @@
 
 <script>
   // ─── CONFIG ───────────────────────────────
-  // Horarios de desbloqueo (hora, minuto) – viernes
+  // Fechas exactas de desbloqueo: sábado 25/04/2026
   const UNLOCK_TIMES = [
-    null,                // slide 0: siempre disponible
-    null,                // slide 1: siempre disponible
-    { h: 1,  m: 0  },   // slide 2: 01:00 (madrugada)
-    { h: 2,  m: 30 },   // slide 3: 02:30 (madrugada)
+    null,                              // slide 0: siempre disponible
+    null,                              // slide 1: siempre disponible
+    new Date(2026, 3, 25, 1, 0),       // slide 2: sáb 25/04/2026 01:00
+    new Date(2026, 3, 25, 2, 30),      // slide 3: sáb 25/04/2026 02:30
   ];
 
   // Texto para el candado bloqueado
   const LOCK_TEXTS = [
     null,
-    { title: "CAPÍTULO I", time: "Se desbloquea a las 22:15" },
-    { title: "CAPÍTULO II", time: "Se desbloquea a la 01:00" },
-    { title: "CAPÍTULO III", time: "Se desbloquea a las 02:30" },
+    null,
+    { title: "CAPÍTULO II", time: "Se desbloquea el sábado a la 01:00" },
+    { title: "CAPÍTULO III", time: "Se desbloquea el sábado a las 02:30" },
   ];
   // ──────────────────────────────────────────
 
@@ -541,18 +541,10 @@
   createStars('stars-3', 100);
 
   // ─── UNLOCK LOGIC ────────────────────────
-  function toMinutesSince6pm(h, m) {
-    let adj = h < 12 ? h + 24 : h;
-    return (adj - 18) * 60 + m;
-  }
-
   function isUnlocked(index) {
     const t = UNLOCK_TIMES[index];
     if (!t) return true; // null = siempre disponible
-    const now = new Date();
-    const nowMins = toMinutesSince6pm(now.getHours(), now.getMinutes());
-    const targetMins = toMinutesSince6pm(t.h, t.m);
-    return nowMins >= targetMins;
+    return new Date() >= t;
   }
 
   // ─── INJECT LOCK OVERLAYS ─────────────────
@@ -623,7 +615,7 @@
   }
 
   function updateCountdown() {
-    const target = nextUnlock();
+    const target = nextUnlock(); // ya es un Date o null
     const display = document.getElementById('countdown-display');
     const box = document.getElementById('countdown-box');
     const label = box ? box.querySelector('.countdown-label') : null;
@@ -634,15 +626,9 @@
       return;
     }
 
-    const now = new Date();
-    const tgt = new Date(now);
-    tgt.setHours(target.h, target.m, 0, 0);
-    if (target.h < 12 && now.getHours() >= 12) {
-      tgt.setDate(tgt.getDate() + 1);
-    }
-    if (tgt <= now) tgt.setDate(tgt.getDate() + 1);
+    const diff = target - new Date();
+    if (diff <= 0) { updateCountdown(); return; }
 
-    const diff = tgt - now;
     const hh = Math.floor(diff / 3600000);
     const mm = Math.floor((diff % 3600000) / 60000);
     const ss = Math.floor((diff % 60000) / 1000);
